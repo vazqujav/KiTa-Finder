@@ -1,0 +1,60 @@
+<p>
+  <h1><%=h @kita.name %></h1>
+</p>
+
+<% unless @kita.contact.empty? %>
+	<p>
+	  <b>Kontaktperson:</b><br />
+	  <%=h @kita.contact %>
+	</p>
+<% end %>
+
+<p>
+  <b>Adresse:</b><br />
+  <%=h @kita.street %><br />
+  <%=h @kita.country_code %>-<%=h @kita.zip %> <%=h @kita.city %>
+</p>
+
+<p>
+  <b>Telefonnummer:</b><br />
+  <%=h @kita.phone %>
+</p>
+
+<% unless @kita.age_from.empty? %>
+<p>
+  <b>Alter von/bis:</b><br />
+  <%=h @kita.age_from %> bis <%=h @kita.age_to %>
+</p>
+<% end %>
+
+<% unless @kita.details.empty? || @kita.details == "-" %>
+    <p>
+      <b>Details:</b><br />
+      <%=h @kita.details %>
+    </p>
+<% end %>
+
+<p>
+<% unless @kita.url.empty? %>
+	  <b><%= link_to_unless(@kita.url.empty?, "Webseite", url_for(@kita.url)) %></b> oder
+<% end %>
+  <b><%= link_to("Google-Suche", "http://www.google.ch/search?q=%22#{@kita.name}%22+#{@kita.city}") %></b>
+</p>
+
+<p>
+	<% if @kita.is_active %>
+		Dieser Eintrag ist aktiv.<br />
+		Letzte &Auml;nderung: <%= @kita.updated_at %>
+	<% else %>
+		Dieser Eintrag ist inaktiv<br />
+		Letzte &Auml;nderung: <%= @kita.updated_at %>
+    <% end %>
+</p>
+<p>
+	<%= link_to "Dies ist keine Kinderkrippe oder Kindertagesst&auml;tte!", no_kita_kita_path(@kita), :method => 'put' %><br />
+	<% unless @kita.no_kita_votes < 2 %>
+		<%= @kita.no_kita_votes.to_s %> Personen sind bisher dieser Meinung. 
+	<% end %>
+</p>
+<%= link_to 'bearbeiten', edit_kita_path(@kita) %> |
+<%= link_to 'zur&uuml;ck', :back %>

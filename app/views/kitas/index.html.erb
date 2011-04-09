@@ -1,0 +1,39 @@
+<div class="content">
+    <div class="search">
+		<p>
+        <% form_tag search_kitas_path, :method => 'get' do -%>
+            <div class="location">
+                <%= label_tag :my_loc, '<strong>Von wo aus soll nach Kinderkrippen gesucht werden:</strong>'%><br />
+                <%= text_field_tag :my_address, @my_address %>
+            </div>
+                <%= submit_tag 'Anzeigen', :class => 'submit'%>
+        <% end %>
+		</p>
+    </div>
+    <% unless @kitas.nil? %>
+        <div class="results">
+            <strong> <%= @kitas.total_entries %> Kinderkrippen gefunden im Umkreis von 2000m</strong>
+              <div class="result_map">
+                <% show_kitas_map %>
+				<%= @kita_map.to_html %>
+			  	<%= @kita_map.div(:width => 500, :height => 350) %>
+              </p>
+              <div class="result_kitas">
+              <% @kitas.each do |kita| %>
+                  <div class="result_kita">
+					<p>
+                    	<b><%= link_to_unless(kita.url.empty?, kita.name, url_for(kita.url)) %></b> - <%= link_to 'Details', kita %><br />
+						Distanz: <%= (kita.distance_from(@my_loc, :units=>:kilometres)*1000).round %>m
+					</p>
+                  </div>
+              <% end -%>
+				<%= will_paginate @kitas, {:class => 'result_navigation',
+			                           		:next_label => 'Vorw&auml;rts',
+			                           		:previous_label => 'Zur&uuml;ck',
+											:method => :post
+			                           	} %>
+              </div>
+			
+        </div>
+    <% end %>
+</div>
